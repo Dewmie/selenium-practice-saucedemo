@@ -31,4 +31,25 @@ public class LoginTest extends BaseTest {
         );
     }
 
+    @Test
+    public void verifyLoginFailsWithWrongUsername(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("wrong_user", "secret_sauce");
+
+        Assert.assertTrue(
+                loginPage.getErrorMessage().contains("Username and password do not match"),
+                "Error message should appear fro wrong credentials"
+        );
+    }
+
+    @Test
+    public void verifyLoggingFailsWithEmptyField(){
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.clickLogin();
+
+        Assert.assertTrue(
+                loginPage.getErrorMessage().contains("Username is required"),
+                "Error message should appear for empty fields"
+        );
+    }
 }
