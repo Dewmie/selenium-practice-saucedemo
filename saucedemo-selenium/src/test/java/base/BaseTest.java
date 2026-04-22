@@ -1,7 +1,7 @@
 package base;
 //writing the setup once, and every test file simply inherits it. That's it.
 
-//💡 This is a core programming principle called DRY — Don't Repeat Yourself
+//This is a core programming principle called DRY — Don't Repeat Yourself
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
