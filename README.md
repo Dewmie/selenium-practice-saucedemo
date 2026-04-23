@@ -1,8 +1,8 @@
-# SauceDemo Selenium Automation Project
+# SauceDemo Selenium Automation Testing Project
 
 A basic test automation project built to practice web UI testing using Selenium WebDriver.
 
-This project focuses on automating login functionality of the SauceDemo web application using a structured and maintainable approach
+This project focuses on automating  functionalities of login and inventory pages in the  SauceDemo web application using a structured and maintainable approach.
 
 ## Tech Stack
 -Java 21
@@ -32,7 +32,12 @@ src/test/java/
 3. Verify login failure with invalid username
 4. Verify login behavior with empty input fields
 
-## How to Run
-1. Clone this repository
-2. Open in IntelliJ IDEA
-3. Run LoginTest.java with TestNG
+### Inventory Page  Functionality
+1. Verify page load with all products
+2. Verify products load with low price to high price
+3. Verify products load with high price to low price
+4. Verify products names load in  Ascending  order
+5. Verify products names load in  descending  order
+6. Verify adding products update the cart badge
+
+
