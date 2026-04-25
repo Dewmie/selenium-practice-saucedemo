@@ -94,7 +94,7 @@ public class InventoryTest extends BaseTest {
                 "Product names should be sorted by name Z to A");
     }
 
-    //Test 6 - Verify adding products to the cart
+    //Test 6 - Verify adding products to the cart update cart count
     @Test
     public void verifyAddProductUpdates(){
         InventoryPage inventoryPage = new InventoryPage(driver);
