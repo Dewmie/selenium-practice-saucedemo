@@ -1,0 +1,79 @@
+package tests;
+
+import base.BaseTest;
+import org.openqa.selenium.By;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.*;
+
+public class EndToEndTest extends BaseTest {
+
+    @Test
+    public void verifySuccessfulPurchase(){
+
+        //--login--
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user","secret_sauce");
+
+        Assert.assertEquals(loginPage.getPageTitle()
+                ,"Products"
+                ,"Page title should be 'Products after successful login'");
+
+        //--add product to cart--
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.waitForPageLoad();
+
+        //--get the 1st product name before adding to cart--
+        String productName = inventoryPage.getProductNames().get(0);
+        inventoryPage.addFirstProductToCart();
+
+        Assert.assertEquals(inventoryPage.getCartCount(), 1,
+                "Cart count should be 1 after adding 1 product");
+
+        //--go to cart page by click cart icon--
+        driver.findElement(By.className("shopping_cart_link")).click();
+
+        CartPage cartPage = new CartPage(driver);
+        cartPage.waitForPageLoad(); //wait for cart page load
+
+        Assert.assertEquals(cartPage.getCartItemName(),productName,
+                "The product added to cart should appear in cart");
+
+        //--Checkout form--
+        //cartPage.clickCheckoutButton();
+
+//        CheckoutPage checkoutPage = new CheckoutPage(driver);
+//        checkoutPage.fillCheckoutForm("Peter","Parker","81000");
+
+//        Assert.assertTrue(checkoutPage.checkTotalPrice().contains("$"),
+//                "Order summary should include the total price");
+//
+//        checkoutPage.clickFinish();
+//
+//        Assert.assertTrue(checkoutPage.getConfirmMessage().contains("Thank you"));
+
+
+                     //----------CHECKOUT FORM-------------------
+
+        // --- STEP 1 -----
+        cartPage.clickCheckoutButton();
+
+        CheckoutStepTwoPage stepTwo = new CheckoutStepOnePage(driver)
+                .fillForm("Peter", "Parker", "81000");
+
+        //---STEP 2----
+        Assert.assertTrue(
+                stepTwo.getTotalPrice().contains("$"),
+                "Summary should show total price");
+
+        CheckoutCompletePage stepThree = stepTwo.clickFinish();
+
+        //----STEP 3----
+        Assert.assertEquals(
+                stepThree.getConfirmationMessage(),
+                "Thank you for your order!",
+                "Should show order confirmation");
+
+    }
+
+}
