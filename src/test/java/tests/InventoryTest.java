@@ -15,7 +15,13 @@ public class InventoryTest extends BaseTest {
     @BeforeMethod
     public void login(){
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
+        //loginPage.login("standard_user", "secret_sauce");
+
+        loginPage.login(
+                utils.ConfigReader.getValidUsername(),
+                utils.ConfigReader.getValidPassword()
+        );
+
         new InventoryPage(driver).waitForPageLoad();
     }
 

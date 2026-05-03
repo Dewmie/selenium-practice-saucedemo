@@ -1,0 +1,6 @@
+username,password,expectedResult,loginShouldSucceed
+standard_user,secret_sauce,Products,true
+standard_user,wrong_password,do not match,false
+invalid_user,secret_sauce,do not match,false
+,,Username is required,false
+locked_out_user,secret_sauce,locked out,false

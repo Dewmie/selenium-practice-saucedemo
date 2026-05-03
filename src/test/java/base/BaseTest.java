@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import utils.ConfigReader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +18,15 @@ public class BaseTest {
     protected WebDriver driver;
 
     //----Change the browser name here - chrome/ edge/ firefox
-    private static final String browser = "edge";
+    //private static final String browser = "edge";
 
     @BeforeMethod
     public void setUp() {
-        //driver = new EdgeDriver();
-        //driver = new ChromeDriver();
-
+        // Initialize browser
+        String browser = ConfigReader.getBrowser();
         driver = createDriver(browser);
         driver.manage().window().maximize();
-        driver.get("https://www.saucedemo.com");
-
+        driver.get(ConfigReader.getBaseUrl());
     }
 
     private WebDriver createDriver(String browser){

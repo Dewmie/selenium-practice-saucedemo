@@ -12,10 +12,14 @@ import pages.LoginPage;
 public class CartTest extends BaseTest {
 
     @BeforeMethod
-    public void setUpCartTest()
-    {
+    public void setUpCartTest() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
+
+        //loginPage.login("standard_user", "secret_sauce");
+
+        loginPage.login(
+                utils.ConfigReader.getValidUsername(),
+                utils.ConfigReader.getValidPassword());
 
         //add 1st product to cart
         InventoryPage inventoryPage = new InventoryPage(driver);
@@ -31,7 +35,7 @@ public class CartTest extends BaseTest {
 
     //Test 1 - verify correct product appears in cart
     @Test
-    public void verifyProductInCart(){
+    public void verifyProductInCart() {
         CartPage cartPage = new CartPage(driver);
         String actualName = cartPage.getCartItemName();
 
@@ -41,7 +45,7 @@ public class CartTest extends BaseTest {
 
     //Test 2 - remove product update
     @Test
-    public void verifyRemoveProductFromCart(){
+    public void verifyRemoveProductFromCart() {
         CartPage cartPage = new CartPage(driver);
         cartPage.removeFirstProductFromCart();
 
@@ -51,7 +55,7 @@ public class CartTest extends BaseTest {
 
     //Test 3 - verify checkout button navigation
     @Test
-    public void verifyCheckoutButtonNavigation(){
+    public void verifyCheckoutButtonNavigation() {
         CartPage cartPage = new CartPage(driver);
         cartPage.clickCheckoutButton();
 

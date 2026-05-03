@@ -3,32 +3,65 @@ package tests;
 import base.BaseTest;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EndToEndTest extends BaseTest {
 
-    @Test
-    public void verifySuccessfulPurchase(){
+    @DataProvider(name = "checkoutData")
+    public Object[][] checkoutData() throws IOException {
+        List<Object[]> data = new ArrayList<>();
+
+        BufferedReader reader = new BufferedReader(
+                new FileReader("src/test/resources/checkout.csv")
+        );
+        reader.readLine();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] row = line.split(",");
+            data.add(row);
+        }
+
+        reader.close();
+        return data.toArray(new Object[0][]);
+    }
+
+    @Test(dataProvider = "checkoutData")
+    public void verifySuccessfulPurchase(String firstname,
+                                         String lastname,
+                                         String zipcode) {
 
         //--login--
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user","secret_sauce");
+        //loginPage.login("standard_user","secret_sauce");
+
+        loginPage.login(
+                utils.ConfigReader.getValidUsername(),
+                utils.ConfigReader.getValidPassword()
+        );
 
         Assert.assertEquals(loginPage.getPageTitle()
-                ,"Products"
-                ,"Page title should be 'Products after successful login'");
+                , "Products"
+                , "Page title should be 'Products after successful login'");
 
         //--add product to cart--
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForPageLoad();
 
-        //--get the 1st product name before adding to cart--
-        String productName = inventoryPage.getProductNames().get(0);
+        String productName = inventoryPage.getProductNames().get(0);         //--get the 1st product name before adding to cart--
         inventoryPage.addFirstProductToCart();
 
         Assert.assertEquals(inventoryPage.getCartCount(), 1,
                 "Cart count should be 1 after adding 1 product");
+
 
         //--go to cart page by click cart icon--
         driver.findElement(By.className("shopping_cart_link")).click();
@@ -36,7 +69,7 @@ public class EndToEndTest extends BaseTest {
         CartPage cartPage = new CartPage(driver);
         cartPage.waitForPageLoad(); //wait for cart page load
 
-        Assert.assertEquals(cartPage.getCartItemName(),productName,
+        Assert.assertEquals(cartPage.getCartItemName(), productName,
                 "The product added to cart should appear in cart");
 
         //--Checkout form--
@@ -53,22 +86,22 @@ public class EndToEndTest extends BaseTest {
 //        Assert.assertTrue(checkoutPage.getConfirmMessage().contains("Thank you"));
 
 
-                     //----------CHECKOUT FORM-------------------
+        //----------CHECKOUT FORM-------------------
 
-        // --- STEP 1 -----
+        // --- PART 1 -----
         cartPage.clickCheckoutButton();
 
         CheckoutStepTwoPage stepTwo = new CheckoutStepOnePage(driver)
-                .fillForm("Peter", "Parker", "81000");
+                .fillForm(firstname, lastname, zipcode);
 
-        //---STEP 2----
+        //---PART 2----
         Assert.assertTrue(
                 stepTwo.getTotalPrice().contains("$"),
                 "Summary should show total price");
 
         CheckoutCompletePage stepThree = stepTwo.clickFinish();
 
-        //----STEP 3----
+        //----PART 3----
         Assert.assertEquals(
                 stepThree.getConfirmationMessage(),
                 "Thank you for your order!",
