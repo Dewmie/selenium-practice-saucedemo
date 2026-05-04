@@ -1,22 +1,17 @@
 # SauceDemo Selenium Automation Testing Project
 
-A basic test automation project built to practice web UI testing using Selenium WebDriver.
-
-This project focuses on automating  functionalities of login and inventory pages in the  SauceDemo web application using a structured and maintainable approach.
+A basic test automation project for [SauceDemo](https://www.saucedemo.com)
+built with Java and Selenium WebDriver following Page Object Model.
 
 ## Tech Stack
--Java 21
-
--Selenium WebDriver 4 
-
--TestNG
-
--WebDriverManager
-
--Maven
+`Java 21`
+`Selenium WebDriver 4.41`
+`TestNG`
+`Maven`
+`ExtentReports`
 
 ## Project Structure
-src/test/java/
+`src/test/java/`
 
 ├── base        (setup & teardown)
 
@@ -24,7 +19,7 @@ src/test/java/
 
 └── tests       (test cases)
 
-src/test/resources/
+`src/test/resources/`
 
 ├── config.properties   (Browser & URL config)
 
