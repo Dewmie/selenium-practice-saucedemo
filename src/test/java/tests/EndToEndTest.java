@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.*;
+import utils.ConfigReader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -39,6 +40,8 @@ public class EndToEndTest extends BaseTest {
                                          String lastname,
                                          String zipcode) {
 
+        test.get().info("Step 1: Login with valid credentials");
+
         //--login--
         LoginPage loginPage = new LoginPage(driver);
         //loginPage.login("standard_user","secret_sauce");
@@ -56,12 +59,17 @@ public class EndToEndTest extends BaseTest {
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForPageLoad();
 
+        test.get().info("Step 2: Adding first product to cart");
         String productName = inventoryPage.getProductNames().get(0);         //--get the 1st product name before adding to cart--
         inventoryPage.addFirstProductToCart();
+
+        test.get().info("Product added: " + productName);
+
 
         Assert.assertEquals(inventoryPage.getCartCount(), 1,
                 "Cart count should be 1 after adding 1 product");
 
+        test.get().info("Step 3: Going to cart");
 
         //--go to cart page by click cart icon--
         driver.findElement(By.className("shopping_cart_link")).click();
@@ -71,6 +79,9 @@ public class EndToEndTest extends BaseTest {
 
         Assert.assertEquals(cartPage.getCartItemName(), productName,
                 "The product added to cart should appear in cart");
+
+        test.get().info("Step 4: Checkout - filling form");
+
 
         //--Checkout form--
         //cartPage.clickCheckoutButton();
@@ -94,12 +105,16 @@ public class EndToEndTest extends BaseTest {
         CheckoutStepTwoPage stepTwo = new CheckoutStepOnePage(driver)
                 .fillForm(firstname, lastname, zipcode);
 
+        test.get().info("Step 5: Verifying order summary");
+
         //---PART 2----
         Assert.assertTrue(
                 stepTwo.getTotalPrice().contains("$"),
                 "Summary should show total price");
 
         CheckoutCompletePage stepThree = stepTwo.clickFinish();
+
+        test.get().info("Step 6: Verifying confirmation");
 
         //----PART 3----
         Assert.assertEquals(

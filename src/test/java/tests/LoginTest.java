@@ -27,7 +27,7 @@ public class LoginTest extends BaseTest {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] row = line.split(",");
+            String[] row = line.split(",", -1);
             data.add(row);
         }
         reader.close();
@@ -41,6 +41,13 @@ public class LoginTest extends BaseTest {
                                         String expectedResult,
                                         String loginShouldSucceed
     ) {
+
+        //  Log test data in report
+        test.get().info("Username: " + username);
+        test.get().info("Password: " + password);
+        test.get().info("Expected: " + expectedResult);
+        test.get().info("Login Success: " + loginShouldSucceed);
+
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(username, password);

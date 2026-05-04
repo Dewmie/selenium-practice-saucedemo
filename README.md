@@ -24,22 +24,28 @@ src/test/java/
 
 └── tests       (test cases)
 
+src/test/resources/
+
+├── config.properties   (Browser & URL config)
+
+├── login.csv           (Login test data)
+
+└── checkout.csv        (Checkout test data)
+
 
 ## Test Cases Covered
-### Login 
-1. Valid and invalid login scenarios
-2. Empty field validation
 
-### Inventory 
-1. Product listing and sorting
-2. Add to cart functionality
+1. Login - Valid/invalid login, empty fields, all user types 
+2. Inventory - Product count, sorting (4 options), add to cart 
+3. Cart - Product verification, remove item, checkout navigation 
+4. Checkout - Form validation, order summary, confirmation 
+5. End to End - Complete purchase journey 
 
-### Checkout
-1. Step 1: Form validation
-2. Step 2: Order overview verification
-3. Step 3: Order completion and confirmation
+## How to Run
+1. Clone the repo
+2. Set browser in `config.properties` → `browser=chrome`
+3. Run via Maven: `mvn test`
+4. View report: `reports/TestReport.html`
 
-### End-to-End Flow
-Login → Add product → Cart → Checkout → Order confirmation
 
 

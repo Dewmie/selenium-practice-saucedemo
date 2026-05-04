@@ -32,6 +32,9 @@ public class InventoryTest extends BaseTest {
 
         int actualCount = inventoryPage.getProductCount();
 
+        test.get().info("Expected product count: 6");
+        test.get().info("Actual product count: " + actualCount);
+
         Assert.assertEquals(actualCount,6,
                 "Product page should display exactly 6 products");
     }
@@ -41,12 +44,14 @@ public class InventoryTest extends BaseTest {
     public void verifyProductsSortedByPriceLowToHigh(){
         InventoryPage inventoryPage = new InventoryPage(driver);
 
-        inventoryPage.sortBy("Price (low to high) ");
+        inventoryPage.sortBy("Price (low to high)");
 
         List<Double> actualPrices = inventoryPage.getProductPrices();
-
         List<Double> expectedPrices = new ArrayList<>(actualPrices);
         Collections.sort(expectedPrices);
+
+        test.get().info("Actual prices: " + actualPrices);
+        test.get().info("Prices are sorting low to high successfully");
 
         Assert.assertEquals(actualPrices, expectedPrices,
                 "Product prices should be sorted by price low to high");
@@ -60,9 +65,12 @@ public class InventoryTest extends BaseTest {
         inventoryPage.sortBy("Price (high to low)");
 
         List<Double> actualPrices = inventoryPage.getProductPrices();
-
         List<Double> expectedPrices = new ArrayList<>(actualPrices);
         Collections.sort(expectedPrices,Collections.reverseOrder());
+
+        test.get().info("Actual prices: " + actualPrices);
+        test.get().info("Products are prices sorting high to low successfully");
+
 
         Assert.assertEquals(actualPrices, expectedPrices,
                 "Product prices should be sorted by price high to low");
@@ -76,9 +84,11 @@ public class InventoryTest extends BaseTest {
         inventoryPage.sortBy("Name (A to Z)");
 
         List<String> actualNames = inventoryPage.getProductNames();
-
         List<String> expectedNames = new ArrayList<>(actualNames);
         Collections.sort(expectedNames, String.CASE_INSENSITIVE_ORDER);
+
+        test.get().info("Actual names: " + actualNames);
+        test.get().info("Product names are sorting A to Z successfully");
 
         Assert.assertEquals(actualNames, expectedNames,
                 "Product names should be sorted by name A to Z");
@@ -92,9 +102,11 @@ public class InventoryTest extends BaseTest {
         inventoryPage.sortBy("Name (Z to A)");
 
         List<String> actualNames = inventoryPage.getProductNames();
-
         List<String> expectedNames = new ArrayList<>(actualNames);
         Collections.sort(expectedNames, Collections.reverseOrder());
+
+        test.get().info("Actual names: " + actualNames);
+        test.get().info("Product names are sorting Z to A successfully");
 
         Assert.assertEquals(actualNames, expectedNames,
                 "Product names should be sorted by name Z to A");
@@ -106,6 +118,9 @@ public class InventoryTest extends BaseTest {
         InventoryPage inventoryPage = new InventoryPage(driver);
 
         inventoryPage.addFirstProductToCart();
+
+        int cartCount = inventoryPage.getCartCount();
+        test.get().info("Cart count after adding 1 product: " + cartCount);
 
         Assert.assertEquals(inventoryPage.getCartCount(), 1,
                 "Cart count should be 1 after adding 1 product");

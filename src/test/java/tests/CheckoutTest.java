@@ -64,10 +64,13 @@ public class CheckoutTest extends BaseTest {
     //Test 1 - Filling checkout form with empty fields showing an error
     @Test
     public void emptyFieldErrorMessageCheck() {
-        CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
-        checkoutStepOnePage.clickContinueEmpty();
+        CheckoutStepOnePage stepOne = new CheckoutStepOnePage(driver);
+        stepOne.clickContinueEmpty();
 
-        Assert.assertTrue(checkoutStepOnePage.getErrorMessage()
+        String errorMsg = stepOne.getErrorMessage();
+        test.get().info("Error message shown: " + errorMsg);
+
+        Assert.assertTrue(stepOne.getErrorMessage()
                         .contains("Error"),
                 "Empty form should show error message");
     }
@@ -78,11 +81,19 @@ public class CheckoutTest extends BaseTest {
                                   String lastname,
                                   String zipcode) {
 
+        //---- Log form data in report---
+        test.get().info("First Name: " + firstname);
+        test.get().info("Last Name: " + lastname);
+        test.get().info("Zip Code: " + zipcode);
+
         CheckoutStepOnePage stepOne = new CheckoutStepOnePage(driver);
         CheckoutStepTwoPage stepTwo = stepOne.fillForm(firstname, lastname, zipcode);
 
+        String totalPrice = stepTwo.getTotalPrice();
+        test.get().info("Total Price: " + totalPrice);
+
         //return step 2 page
-        Assert.assertTrue(stepTwo.getTotalPrice().contains("$"),
+        Assert.assertTrue(totalPrice.contains("$"),
                 "Total price should be displayed on overview page");
     }
 
@@ -92,12 +103,18 @@ public class CheckoutTest extends BaseTest {
                                          String lastname,
                                          String zipcode) {
 
+        test.get().info("First Name: " + firstname);
+        test.get().info("Last Name: " + lastname);
+        test.get().info("Zip Code: " + zipcode);
+
         // Step 1 → Step 2
         CheckoutStepTwoPage stepTwo = new CheckoutStepOnePage(driver)
                 .fillForm(firstname, lastname, zipcode);
 
         // Step 2 → Step 3
         CheckoutCompletePage stepThree = stepTwo.clickFinish();
+
+        test.get().info("Confirmation message showing successfuly");
 
         Assert.assertEquals(
                 stepThree.getConfirmationMessage(),
