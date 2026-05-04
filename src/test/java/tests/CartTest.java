@@ -11,15 +11,22 @@ import pages.LoginPage;
 
 public class CartTest extends BaseTest {
 
+    private String expectedProductName;
+
     @BeforeMethod
-    public void setUpCartTest()
-    {
+    public void setUpCartTest() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
+
+        //loginPage.login("standard_user", "secret_sauce");
+
+        loginPage.login(
+                utils.ConfigReader.getValidUsername(),
+                utils.ConfigReader.getValidPassword());
 
         //add 1st product to cart
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForPageLoad();
+        expectedProductName = inventoryPage.getProductNames().get(0);
         inventoryPage.addFirstProductToCart();
 
         //go to cart page by click cart icon
@@ -31,9 +38,12 @@ public class CartTest extends BaseTest {
 
     //Test 1 - verify correct product appears in cart
     @Test
-    public void verifyProductInCart(){
+    public void verifyProductInCart() {
         CartPage cartPage = new CartPage(driver);
         String actualName = cartPage.getCartItemName();
+
+        test.get().info("Expected product: " + expectedProductName);
+        test.get().info("Actual product: " + actualName);
 
         Assert.assertEquals(actualName, "Sauce Labs Backpack",
                 "The product added to cart should appear in cart");
@@ -41,9 +51,12 @@ public class CartTest extends BaseTest {
 
     //Test 2 - remove product update
     @Test
-    public void verifyRemoveProductFromCart(){
+    public void verifyRemoveProductFromCart() {
         CartPage cartPage = new CartPage(driver);
         cartPage.removeFirstProductFromCart();
+
+        test.get().info("Product removed");
+
 
         Assert.assertFalse(cartPage.isCartBadgeDisplayed(),
                 "Cart badge should not display after remove the item");
@@ -51,11 +64,14 @@ public class CartTest extends BaseTest {
 
     //Test 3 - verify checkout button navigation
     @Test
-    public void verifyCheckoutButtonNavigation(){
+    public void verifyCheckoutButtonNavigation() {
         CartPage cartPage = new CartPage(driver);
         cartPage.clickCheckoutButton();
 
-        Assert.assertTrue(cartPage.getCurrentUrl().contains("checkout-step-one"),
+        String currentURL = cartPage.getCurrentUrl();
+        test.get().info("Navigated to: " + currentURL + " successfully");
+
+        Assert.assertTrue(currentURL.contains("checkout-step-one"),
                 "Click Checkout button should navigate to checkout page");
     }
 
